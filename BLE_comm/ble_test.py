@@ -7,6 +7,7 @@ import time
 
 dev_lefthand_mac = "6C:79:B8:D3:6E:BE"
 dev_righthand_mac = "B0:B1:13:2D:D6:44"
+dev_ultrasonic_mac ="6C:79:B8:D3:80:56"
 
 dev_lefthand = device(dev_lefthand_mac,"lefthand_ble_deveice")
 dev_righthand = device(dev_righthand_mac,"righthand_ble_deveice")

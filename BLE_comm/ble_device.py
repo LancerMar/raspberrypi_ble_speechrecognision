@@ -12,12 +12,14 @@ class device:
         self.dev_ch = self.dev_serice.getCharacteristics("dfb1")[0]
 
     def receive(self):
-        self.thread_receive = myThread(dev,self.name)
+        self.thread_receive = myThread(self.dev,self.name)
         self.thread_receive.start()
-        self.thread_receive.join()
 
     def send(self,data):
         self.dev_ch.write(data)
 
     def exit(self):
         self.thread_receive.exit()
+
+    def join(self):
+        self.thread_receive.join()

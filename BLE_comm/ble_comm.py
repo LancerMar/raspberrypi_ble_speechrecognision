@@ -2,6 +2,7 @@ from bluepy import btle
 import threading
 import time
 import struct
+import queue
 
 import sys
 sys.path.append('../Audio_sys')
@@ -9,6 +10,9 @@ sys.path.append('../Audio_sys')
 from textToSpeeh import speek
 
 # "6C:79:B8:D3:6E:BE"
+
+q_speaking_text = queue.Queue()
+q_ble_sending_msg = queue.Queue()
 
 class myThread(threading.Thread):
     def __init__(self, dev_ble,dev_name):
@@ -44,6 +48,7 @@ def Proc_data(data):
         obstacle_alert = "Obstacle"
         obstacle_direction = ""
         obstacle_distance = ""
+        data_send_ble = bytes([0x80,0x81,0xef,0xef,0xff,0xff])
 
         # print("len:"+str(len(data)))
         data_unpack = struct.unpack('7B',data)
@@ -53,7 +58,30 @@ def Proc_data(data):
         and data_unpack[5] == 0xef
         and data_unpack[6] == 0xef):
             print("data package completed")
-        
+
+        if(data_unpack[4] == 0x0a):
+            print("within 300 centimeter")
+            obstacle_distance = " within 300 centimeter"
+            data_send_ble[3] = 0x33
+
+        elif(data_unpack[4] == 0x0b):
+            print("within 300 centimeter to 500 centimeter")
+            obstacle_distance = " within 300 centimeter to 500 centimeter"
+            data_send_ble[3] = 0x32
+
+        elif(data_unpack[4] == 0x0c):
+            print("within 500 centimeter to 1000 centimeter")
+            obstacle_distance = " within 500 centimeter to 1000 centimeter"
+            data_send_ble[3] = 0x31
+
+        elif(data_unpack[4] ==0x0d):
+            print("over 1000 centimeter")
+            obstacle_distance = " over 1000 centimeter"
+            data_send_ble[3] = 0x30
+        else: 
+            print("wrong package!")
+            return
+
         if(data_unpack[3] == 0x00):
             print("above")
             obstacle_direction = " above"
@@ -63,30 +91,20 @@ def Proc_data(data):
         elif(data_unpack[3] == 0x02):
             print("left")
             obstacle_direction = " left"
+            data_send_ble[2] = 0x01
         elif(data_unpack[3] == 0x03):
             print("right")
             obstacle_direction = " right"
+            data_send_ble[2] = 0x02
         else:
-            print("wrong package!")
-            return
-
-        if(data_unpack[4] == 0x0a):
-            print("within 300 centimeter")
-            obstacle_distance = " within 300 centimeter"
-        elif(data_unpack[4] == 0x0b):
-            print("within 300 centimeter to 500 centimeter")
-            obstacle_distance = " within 300 centimeter to 500 centimeter"
-        elif(data_unpack[4] == 0x0c):
-            print("within 500 centimeter to 1000 centimeter")
-            obstacle_distance = " within 500 centimeter to 1000 centimeter"
-        else: 
             print("wrong package!")
             return
 
         obstacle_alert = obstacle_alert + obstacle_distance + obstacle_direction
         print(obstacle_alert)
-
-        speek(obstacle_alert)
+        q_speaking_text.put(obstacle_alert)
+        q_ble_sending_msg.put(data_send_ble)
+        # speek(obstacle_alert)
 
         
         # if(data_unpack[0] == 0x80):

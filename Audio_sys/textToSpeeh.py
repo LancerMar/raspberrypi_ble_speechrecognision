@@ -10,3 +10,8 @@ def speek(text_speek):
 
 
 # speek("turn left and go straight to the end of this road")
+
+# data_test = bytearray([0x01,0x02,0x03,0x04])
+# data_test[2] = 0x88
+
+# print(data_test)

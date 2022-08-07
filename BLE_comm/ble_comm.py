@@ -10,8 +10,6 @@ sys.path.append('../Audio_sys')
 from textToSpeeh import speek
 
 # "6C:79:B8:D3:6E:BE"
-
-q_speaking_text = queue.Queue()
 q_ble_sending_msg = queue.Queue()
 
 class myThread(threading.Thread):
@@ -48,7 +46,7 @@ def Proc_data(data):
         obstacle_alert = "Obstacle"
         obstacle_direction = ""
         obstacle_distance = ""
-        data_send_ble = bytes([0x80,0x81,0xef,0xef,0xff,0xff])
+        data_send_ble = bytearray([0x80,0x81,0xef,0xef,0xff,0xff])
 
         # print("len:"+str(len(data)))
         data_unpack = struct.unpack('7B',data)
@@ -102,9 +100,8 @@ def Proc_data(data):
 
         obstacle_alert = obstacle_alert + obstacle_distance + obstacle_direction
         print(obstacle_alert)
-        q_speaking_text.put(obstacle_alert)
         q_ble_sending_msg.put(data_send_ble)
-        # speek(obstacle_alert)
+        speek(obstacle_alert)
 
         
         # if(data_unpack[0] == 0x80):

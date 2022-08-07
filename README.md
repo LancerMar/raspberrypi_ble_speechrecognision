@@ -12,3 +12,4 @@ i2s_mic for linux: [link](https://cdn-learn.adafruit.com/downloads/pdf/adafruit-
 sudo apt-get install libasound2-dev python3-pip libboost-all-dev
 ```
 
+switch pin: 29 GND

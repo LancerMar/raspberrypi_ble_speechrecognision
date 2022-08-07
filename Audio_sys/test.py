@@ -8,8 +8,8 @@ thread_rec_speech.join()
 # from record import record
 # import speechToText
 
-# record_audio = record("testSpeech2text.wav")
+# record_audio = record("testSpeech3text.wav")
 # print("1")
-# record_audio.record(10)
+# record_audio.record(5)
 # print("2")
 # speechToText.speechToText("testSpeech2text.wav")

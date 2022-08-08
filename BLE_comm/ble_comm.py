@@ -90,17 +90,19 @@ def Proc_data(data):
             print("left")
             obstacle_direction = " left"
             data_send_ble[2] = 0x01
+            q_ble_sending_msg.put(data_send_ble)
         elif(data_unpack[3] == 0x03):
             print("right")
             obstacle_direction = " right"
             data_send_ble[2] = 0x02
+            q_ble_sending_msg.put(data_send_ble)
         else:
             print("wrong package!")
             return
 
         obstacle_alert = obstacle_alert + obstacle_distance + obstacle_direction
         print(obstacle_alert)
-        q_ble_sending_msg.put(data_send_ble)
+        
         speek(obstacle_alert)
 
         

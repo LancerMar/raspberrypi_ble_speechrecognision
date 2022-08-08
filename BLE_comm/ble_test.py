@@ -10,27 +10,27 @@ import threading
 class mysend_data_ble_Thread(threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)
-        self.dev_ble = dev_ble
-        self.dev_name = dev_name
 
     def run(self):
-        print("start receiving data from " + self.dev_name)
+        # print("start receiving data from " + self.dev_name)
         send_data_ble()
 
 
 def send_data_ble():
+    print("@@@@@@@@@@@@@@@@@operate send_data_ble.......")
     while(True):
-        if(ble_comm.q_ble_sending_msg.empty()):
+        time.sleep(0.1)
+        if(q_ble_sending_msg.empty()):
             continue
 
-        send_data = ble_comm.q_ble_sending_msg.get()
+        send_data = q_ble_sending_msg.get()
         if(send_data[2] == 0x01):
-            # dev_lefthand_mac.send(send_data)
-            pring("send data to left hand")
+            # dev_lefthand.send(send_data)
+            print("========================send data to left hand====================")
         
         if(send_data[2] == 0x02):
-            pring("send data to right hand")
-            dev_righthand_mac.send(send_data)
+            print("==================send data to right hand=========================")
+            dev_righthand.send(send_data)
 
 
 
@@ -52,7 +52,7 @@ print("receiving data ...........")
 # test_send_vib_data =  bytes([0x80,0x81,0x01,0x30,0xff,0xff])
 # time.sleep(3)
 
-# print("send data")
+print("send data")
 # dev_ultrasonic.send(test_send_vib_data)
 
 t_send_ble_data = mysend_data_ble_Thread()

@@ -25,7 +25,7 @@ def send_data_ble():
 
         send_data = q_ble_sending_msg.get()
         if(send_data[2] == 0x01):
-            # dev_lefthand.send(send_data)
+            dev_lefthand.send(send_data)
             print("========================send data to left hand====================")
         
         if(send_data[2] == 0x02):
@@ -36,16 +36,15 @@ def send_data_ble():
 
 
 
-# dev_lefthand_mac = "6C:79:B8:D3:6E:BE"
-
+dev_lefthand_mac = "6C:79:B8:D3:6E:BE"
 dev_righthand_mac = "B0:B1:13:2D:D6:44"
 dev_ultrasonic_mac ="6C:79:B8:D3:80:56"
 
-# dev_lefthand = device(dev_lefthand_mac,"lefthand_ble_deveice")
+dev_lefthand = device(dev_lefthand_mac,"lefthand_ble_deveice")
 dev_righthand = device(dev_righthand_mac,"righthand_ble_deveice")
 dev_ultrasonic = device(dev_ultrasonic_mac,"ultrasonic_ble_deveice")
 
-# dev_lefthand.receive()
+dev_lefthand.receive()
 dev_righthand.receive()
 dev_ultrasonic.receive()
 print("receiving data ...........")
